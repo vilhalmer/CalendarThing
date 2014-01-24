@@ -1,6 +1,7 @@
 /** The internal representation of calendar data. **/
 
 import java.util.HashMap;
+import java.util.GregorianCalendar;
 
 public class CalendarData
 {
@@ -11,7 +12,7 @@ public class CalendarData
         // import data or something
     }
 
-    public int eventCountOnDate(Calendar date)
+    public int eventCountOnDate(GregorianCalendar date)
     /** @param date: Should be yyyymmdd **/
     {
         Event[] events = eventsByDay.get(date);
@@ -20,7 +21,7 @@ public class CalendarData
         return events.length;
     }
 
-    public Event[] eventsOnDate(Calendar date)
+    public Event[] eventsOnDate(GregorianCalendar date)
     {
         return eventsByDay.get(date);
     }

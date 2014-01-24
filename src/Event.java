@@ -46,10 +46,12 @@ public class Event
     public String displayString()
     {
         //return time + ": " + title + ": " + description;
+        return null;
     }
     
     public String storedString()
     {
         //return date + "\t" + time + "\t" + title + "\t" + description + "\t" + color;
+        return null;
     }
 }

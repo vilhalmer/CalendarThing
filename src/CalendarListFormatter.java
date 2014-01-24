@@ -8,7 +8,7 @@ public class CalendarListFormatter extends CalendarFormatter
     @Override
     public String format(CalendarData aCalendar)
     {
-        
+        return null;
     }
 
     public void setShowToday(boolean shouldShow)
