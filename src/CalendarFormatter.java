@@ -1,6 +1,4 @@
-<<<<<<< HEAD
 import java.util.GregorianCalendar;
->>>>>>> d292ef723ec1c2cd3e4a61d03097ac295de40e3f
 
 public abstract class CalendarFormatter
 {
