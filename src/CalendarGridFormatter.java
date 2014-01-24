@@ -1,3 +1,5 @@
+import java.util.GregorianCalendar;
+
 public class CalendarGridFormatter extends CalendarFormatter
 {
     // ANSI color codes are 30 + N, 40 + N for background:
@@ -17,7 +19,7 @@ public class CalendarGridFormatter extends CalendarFormatter
 
         // So, this formatter is always going to output at *least* a full month view. If the date range is smaller than that, it will grey out the hidden days.
         // First on the agenda is figuring out which day the specified month starts on:
-        int firstDayColumn = beginDate.get(Calendar.DAY_OF_WEEK) - 1; // Minus one to put us at the zeroth column for Sunday.
+        int firstDayColumn = beginDate.get(GregorianCalendar.DAY_OF_WEEK) - 1; // Minus one to put us at the zeroth column for Sunday.
         GregorianCalendar currentDate = beginDate.clone();
 
         // Pad to the first column with empty space:
@@ -27,13 +29,13 @@ public class CalendarGridFormatter extends CalendarFormatter
 
         // Now fill in all of the day numbers, colorizing as we go:
         while (currentDate.compare(endDate) <= 0) {
-            int col = currentDate.get(Calendar.DAY_OF_MONTH) - 1 + firstDayColumn;
+            int col = currentDate.get(GregorianCalendar.DAY_OF_MONTH) - 1 + firstDayColumn;
 
             if (col % 7 == 0) {
                 output += "\n"; // Line break before each Sunday.
             }
 
-            output += String.format(" %02d ", currentDate.get(Calendar.DAY_OF_MONTH));
+            output += String.format(" %02d ", currentDate.get(GregorianCalendar.DAY_OF_MONTH));
         }
 
         return output;
