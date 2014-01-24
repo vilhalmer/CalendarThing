@@ -1,9 +1,11 @@
+import java.util.GregorianCalendar;
+
 public abstract class CalendarFormatter
 {
-    protected Calendar beginDate;
-    protected Calendar endDate;
+    protected GregorianCalendar beginDate;
+    protected GregorianCalendar endDate;
 
-    public void setDateRange(Calendar aBeginDate, Calendar anEndDate)
+    public void setDateRange(GregorianCalendar aBeginDate, GregorianCalendar anEndDate)
     {
         if (anEndDate.before(aBeginDate)) {
             throw new InvalidArgumentException("Invalid date range");

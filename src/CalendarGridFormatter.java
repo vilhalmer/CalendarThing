@@ -17,8 +17,26 @@ public class CalendarGridFormatter extends CalendarFormatter
 
         // So, this formatter is always going to output at *least* a full month view. If the date range is smaller than that, it will grey out the hidden days.
         // First on the agenda is figuring out which day the specified month starts on:
-        int firstDay = GregorianCalendar(aCalendar.get(Calendar.YEAR), aCalendar.get(Calendar.MONTH), 1).get(Calendar.DAY_OF_WEEK) - 1; // Minus one to put us at the zeroth column for Sunday.
-        
+        int firstDayColumn = beginDate.get(Calendar.DAY_OF_WEEK) - 1; // Minus one to put us at the zeroth column for Sunday.
+        GregorianCalendar currentDate = beginDate.clone();
+
+        // Pad to the first column with empty space:
+        for (int i = 0; i < firstDayColumn; ++i) {
+            output += "    ";
+        }
+
+        // Now fill in all of the day numbers, colorizing as we go:
+        while (currentDate.compare(endDate) <= 0) {
+            int col = currentDate.get(Calendar.DAY_OF_MONTH) - 1 + firstDayColumn;
+
+            if (col % 7 == 0) {
+                output += "\n"; // Line break before each Sunday.
+            }
+
+            output += String.format(" %02d ", currentDate.get(Calendar.DAY_OF_MONTH));
+        }
+
+        return output;
     }
 
     public void setColorize(boolean shouldColorize)
@@ -33,10 +51,19 @@ public class CalendarGridFormatter extends CalendarFormatter
 
     private String color(int aCode)
     {
-        if (code = -1) {
-            return "\x1b[0m";
+        if (aCode == -1) {
+            return "\\x1b[0m";
         }
 
-        return "\x1b[3" + code + ";1m";
+        return "\\x1b[3" + aCode + ";1m";
+    }
+
+    public static void main(String[] args)
+    {
+        CalendarGridFormatter formatter = new CalendarGridFormatter();
+        formatter.setDateRange(new GregorianCalendar(), new GregorianCalendar());
+        String testOutput = formatter.format(null);
+
+        System.out.println(testOutput);
     }
 }
