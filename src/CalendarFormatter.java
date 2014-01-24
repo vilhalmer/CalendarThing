@@ -1,3 +1,5 @@
+import java.util.Calendar;
+
 public abstract class CalendarFormatter
 {
     protected Calendar beginDate;
@@ -6,7 +8,7 @@ public abstract class CalendarFormatter
     public void setDateRange(Calendar aBeginDate, Calendar anEndDate)
     {
         if (anEndDate.before(aBeginDate)) {
-            throw new InvalidArgumentException("Invalid date range");
+            throw new IllegalArgumentException("Invalid date range");
         }
 
         beginDate = aBeginDate;
