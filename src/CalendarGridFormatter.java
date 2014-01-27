@@ -19,8 +19,14 @@ public class CalendarGridFormatter extends CalendarFormatter
 
         // So, this formatter is always going to output at *least* a full month view. If the date range is smaller than that, it will grey out the hidden days.
         // First on the agenda is figuring out which day the specified month starts on:
-        int firstDayColumn = beginDate.get(GregorianCalendar.DAY_OF_WEEK) - 1; // Minus one to put us at the zeroth column for Sunday.
-        GregorianCalendar currentDate = (GregorianCalendar)beginDate.clone();
+        GregorianCalendar currentDate = (GregorianCalendar)this.beginDate.clone();
+        currentDate.set(GregorianCalendar.DAY_OF_MONTH, 1);
+
+        int firstDayColumn = currentDate.get(GregorianCalendar.DAY_OF_WEEK) - 1; // Minus one to put us at the zeroth column for Sunday.
+
+        GregorianCalendar endOfMonth = (GregorianCalendar)currentDate.clone();
+        endOfMonth.set(GregorianCalendar.DAY_OF_MONTH, endOfMonth.getActualMaximum(GregorianCalendar.DAY_OF_MONTH));
+        System.out.println(currentDate.get(GregorianCalendar.DAY_OF_MONTH));
 
         // Pad to the first column with empty space:
         for (int i = 0; i < firstDayColumn; ++i) {
@@ -28,14 +34,20 @@ public class CalendarGridFormatter extends CalendarFormatter
         }
 
         // Now fill in all of the day numbers, colorizing as we go:
-        while (currentDate.compareTo(endDate) <= 0) {
+        while (currentDate.compareTo(endOfMonth) <= 0) {
             int col = currentDate.get(GregorianCalendar.DAY_OF_MONTH) - 1 + firstDayColumn;
 
             if (col % 7 == 0) {
                 output += "\n"; // Line break before each Sunday.
             }
 
-            output += String.format(" %02d ", currentDate.get(GregorianCalendar.DAY_OF_MONTH));
+            if (currentDate.compareTo(this.beginDate) == 0) {
+                output += String.format("[%02d]", currentDate.get(GregorianCalendar.DAY_OF_MONTH));
+            }
+            else {
+                output += String.format(" %02d ", currentDate.get(GregorianCalendar.DAY_OF_MONTH));
+            }
+            currentDate.add(GregorianCalendar.DAY_OF_MONTH, 1);
         }
 
         return output;
