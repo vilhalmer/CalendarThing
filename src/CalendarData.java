@@ -34,7 +34,6 @@ public class CalendarData
     }
 
     public int eventCountOnDate(GregorianCalendar date)
-    /** @param date: Should be yyyymmdd **/
     {
         SortedSet<Event> events = eventsByDay.get(dateString(date));
         if (events == null) return 0;

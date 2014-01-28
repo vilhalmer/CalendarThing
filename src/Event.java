@@ -1,6 +1,7 @@
 /** A single event on a Calendar **/
 
 import java.util.GregorianCalendar;
+import java.util.Locale;
 
 public class Event implements Comparable<Event>
 {
@@ -31,7 +32,7 @@ public class Event implements Comparable<Event>
         String[] dateComponents = components[0].split("-");
         String[] timeComponents = components[1].split(":");
         date = new GregorianCalendar(Integer.parseInt(dateComponents[0]), 
-                                     Integer.parseInt(dateComponents[1]),
+                                     Integer.parseInt(dateComponents[1]) - 1, // YES, LET'S START NUMBERING THE DAYS AT ONE, BUT THE MONTHS AT ZERO. *BRILLIANT*.
                                      Integer.parseInt(dateComponents[2]),
                                      Integer.parseInt(timeComponents[0]),
                                      Integer.parseInt(timeComponents[1]));
@@ -55,16 +56,36 @@ public class Event implements Comparable<Event>
         return description;
     }
 
+    public int getColor()
+    {
+        return color;
+    }
+
     public String displayString()
     {
-        //return time + ": " + title + ": " + description;
-        return null;
+        GregorianCalendar currentDate = this.getDate();
+        String out = String.format("%s %02d / %d:%02d %s - %s\n", currentDate.getDisplayName(GregorianCalendar.MONTH, GregorianCalendar.SHORT, Locale.getDefault()),
+                                                                  currentDate.get(GregorianCalendar.DAY_OF_MONTH),
+                                                                  currentDate.get(GregorianCalendar.HOUR),
+                                                                  currentDate.get(GregorianCalendar.MINUTE),
+                                                                  currentDate.getDisplayName(GregorianCalendar.AM_PM, GregorianCalendar.SHORT, Locale.getDefault()),
+                                                                  this.getTitle());
+        for (String line : this.getDescription().split("\n")) {
+            out += "  " + line;
+        }
+
+        return out;
     }
     
     public String storedString()
     {
         //return date + "\t" + time + "\t" + title + "\t" + description + "\t" + color;
         return null;
+    }
+
+    public String toString()
+    {
+        return this.displayString();
     }
 
     public int compareTo(Event anObject)
