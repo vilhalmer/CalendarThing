@@ -3,18 +3,8 @@ import java.util.Locale;
 
 public class CalendarGridFormatter extends CalendarFormatter
 {
-    // ANSI color codes are 30 + N, 40 + N for background:
-    private static final int DEFAULT = -1;
-    private static final int BLACK   = 0;
-    private static final int RED     = 1;
-    private static final int GREEN   = 2;
-    private static final int YELLOW  = 3;
-    private static final int BLUE    = 4;
-    private static final int MAGENTA = 5;
-    private static final int CYAN    = 6;
-
     private boolean colorize = true;
-    private boolean bracketToday = true;
+    private boolean hilightToday = true;
 
     public String format(CalendarData aCalendar)
     {
@@ -50,7 +40,9 @@ public class CalendarGridFormatter extends CalendarFormatter
                 output += "\n"; // Line break before each Sunday.
             }
             
-            int fgColor = -1;
+            int fgColor = DEFAULT;
+            int bgColor = DEFAULT;
+            int mode = NORMAL;
             if (this.colorize) {
                 if (currentDate.compareTo(beginDate) < 0 || currentDate.compareTo(endDate) > 0) {
                     fgColor = BLACK;
@@ -66,12 +58,12 @@ public class CalendarGridFormatter extends CalendarFormatter
                 }
             }
 
-            if (currentDate.compareTo(today) == 0 && this.bracketToday) {
-                output += String.format("%s[%2s]%s", color(fgColor), String.valueOf(currentDate.get(GregorianCalendar.DAY_OF_MONTH)), color(DEFAULT));
+            if (currentDate.compareTo(today) == 0 && this.hilightToday) {
+                //output += String.format("%s[%2s]%s", color(fgColor), String.valueOf(currentDate.get(GregorianCalendar.DAY_OF_MONTH)), color(DEFAULT));
+                mode = REVERSE;
             }
-            else {
-                output += String.format("%s %2s %s", color(fgColor), String.valueOf(currentDate.get(GregorianCalendar.DAY_OF_MONTH)), color(DEFAULT));
-            }
+
+            output += String.format("%s %2s %s", color(fgColor, bgColor, mode), String.valueOf(currentDate.get(GregorianCalendar.DAY_OF_MONTH)), color(DEFAULT, DEFAULT, NORMAL));
             currentDate.add(GregorianCalendar.DAY_OF_MONTH, 1);
         }
 
@@ -83,18 +75,9 @@ public class CalendarGridFormatter extends CalendarFormatter
         colorize = shouldColorize;
     }
 
-    public void setBracketToday(boolean shouldBracket)
+    public void setHilightToday(boolean shouldHilight)
     {
-        bracketToday = shouldBracket;
-    }
-
-    private String color(int aCode)
-    {
-        if (aCode == -1) {
-            return "\033[0m";
-        }
-
-        return "\033[3" + aCode + ";1m";
+        hilightToday = shouldHilight;
     }
 
     public static void main(String[] args)

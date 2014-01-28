@@ -37,8 +37,8 @@ public class Event implements Comparable<Event>
                                      Integer.parseInt(timeComponents[0]),
                                      Integer.parseInt(timeComponents[1]));
         title = components[2];
-        description = components[3];
-        color = Integer.parseInt(components[4]);
+        color = Integer.parseInt(components[3]);
+        description = components[4];
     }
 
     public GregorianCalendar getDate()
@@ -79,8 +79,15 @@ public class Event implements Comparable<Event>
     
     public String storedString()
     {
-        //return date + "\t" + time + "\t" + title + "\t" + description + "\t" + color;
-        return null;
+        GregorianCalendar currentDate = this.getDate();
+
+        String out = currentDate.get(GregorianCalendar.YEAR) + "-" + (currentDate.get(GregorianCalendar.MONTH) + 1) + "-" + currentDate.get(GregorianCalendar.DAY_OF_MONTH) + "\t";
+        out += currentDate.get(GregorianCalendar.HOUR_OF_DAY) + ":" + currentDate.get(GregorianCalendar.MINUTE) + "\t";
+        out += this.getTitle() + "\t";
+        out += this.getColor() + "\t";
+        out += this.getDescription();
+
+        return out;
     }
 
     public String toString()

@@ -17,10 +17,14 @@ public class CalendarData
         try {
             BufferedReader in = new BufferedReader(new FileReader(dataFilePath));
 
+            String currentEvent = "";
             String currentLine;
             while ((currentLine = in.readLine()) != null) {
-                if (currentLine.equals("")) continue;
-                this.addEvent(new Event(currentLine));
+                currentEvent += currentLine;
+                if (currentLine.endsWith("\t\t")) {
+                    this.addEvent(new Event(currentLine));
+                    currentEvent = "";
+                }
             }
         }
         catch (FileNotFoundException e) { // What even is error handling
