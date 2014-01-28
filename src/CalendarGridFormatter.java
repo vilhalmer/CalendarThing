@@ -1,14 +1,17 @@
 import java.util.GregorianCalendar;
+import java.util.Locale;
 
 public class CalendarGridFormatter extends CalendarFormatter
 {
     // ANSI color codes are 30 + N, 40 + N for background:
-    public static final int RED     = 1;
-    public static final int GREEN   = 2;
-    public static final int YELLOW  = 3;
-    public static final int BLUE    = 4;
-    public static final int MAGENTA = 5;
-    public static final int CYAN    = 6;
+    private static final int DEFAULT = -1;
+    private static final int BLACK   = 0;
+    private static final int RED     = 1;
+    private static final int GREEN   = 2;
+    private static final int YELLOW  = 3;
+    private static final int BLUE    = 4;
+    private static final int MAGENTA = 5;
+    private static final int CYAN    = 6;
 
     private boolean colorize = true;
     private boolean bracketToday = true;
@@ -16,6 +19,8 @@ public class CalendarGridFormatter extends CalendarFormatter
     public String format(CalendarData aCalendar)
     {
         String output = " Su  Mo  Tu  We  Th  Fr  Sa \n";
+        // Need an object to find today, without time:
+        GregorianCalendar today = boringDate(new GregorianCalendar());
 
         // So, this formatter is always going to output at *least* a full month view. If the date range is smaller than that, it will grey out the hidden days.
         // First on the agenda is figuring out which day the specified month starts on:
@@ -26,7 +31,11 @@ public class CalendarGridFormatter extends CalendarFormatter
 
         GregorianCalendar endOfMonth = (GregorianCalendar)currentDate.clone();
         endOfMonth.set(GregorianCalendar.DAY_OF_MONTH, endOfMonth.getActualMaximum(GregorianCalendar.DAY_OF_MONTH));
-        System.out.println(currentDate.get(GregorianCalendar.DAY_OF_MONTH));
+
+        String monthName = currentDate.getDisplayName(GregorianCalendar.MONTH, GregorianCalendar.LONG, Locale.getDefault());
+        monthName += " " + currentDate.get(GregorianCalendar.YEAR);
+        int monthNamePadding = (output.length() / 2) + (monthName.length() / 2);
+        System.out.printf("%" + monthNamePadding + "s\n", monthName);
 
         // Pad to the first column with empty space:
         for (int i = 0; i < firstDayColumn; ++i) {
@@ -40,12 +49,28 @@ public class CalendarGridFormatter extends CalendarFormatter
             if (col % 7 == 0) {
                 output += "\n"; // Line break before each Sunday.
             }
+            
+            int fgColor = -1;
+            if (this.colorize) {
+                if (currentDate.compareTo(beginDate) < 0 || currentDate.compareTo(endDate) > 0) {
+                    fgColor = BLACK;
+                }
+                else if (aCalendar.eventCountOnDate(currentDate) > 6) {
+                    fgColor = RED;
+                }
+                else if (aCalendar.eventCountOnDate(currentDate) > 3) {
+                    fgColor = YELLOW;
+                }
+                else if (aCalendar.eventCountOnDate(currentDate) > 0) {
+                    fgColor = GREEN;
+                }
+            }
 
-            if (currentDate.compareTo(this.beginDate) == 0) {
-                output += String.format("[%02d]", currentDate.get(GregorianCalendar.DAY_OF_MONTH));
+            if (currentDate.compareTo(today) == 0 && this.bracketToday) {
+                output += String.format("%s[%2s]%s", color(fgColor), String.valueOf(currentDate.get(GregorianCalendar.DAY_OF_MONTH)), color(DEFAULT));
             }
             else {
-                output += String.format(" %02d ", currentDate.get(GregorianCalendar.DAY_OF_MONTH));
+                output += String.format("%s %2s %s", color(fgColor), String.valueOf(currentDate.get(GregorianCalendar.DAY_OF_MONTH)), color(DEFAULT));
             }
             currentDate.add(GregorianCalendar.DAY_OF_MONTH, 1);
         }
@@ -66,17 +91,26 @@ public class CalendarGridFormatter extends CalendarFormatter
     private String color(int aCode)
     {
         if (aCode == -1) {
-            return "\\x1b[0m";
+            return "\033[0m";
         }
 
-        return "\\x1b[3" + aCode + ";1m";
+        return "\033[3" + aCode + ";1m";
     }
 
     public static void main(String[] args)
     {
         CalendarGridFormatter formatter = new CalendarGridFormatter();
-        formatter.setDateRange(new GregorianCalendar(), new GregorianCalendar());
-        String testOutput = formatter.format(null);
+
+        GregorianCalendar beginDate = new GregorianCalendar();
+        beginDate.set(GregorianCalendar.DAY_OF_MONTH, 1);
+        GregorianCalendar endDate = new GregorianCalendar();
+        endDate.set(GregorianCalendar.DAY_OF_MONTH, endDate.getActualMaximum(GregorianCalendar.DAY_OF_MONTH));
+
+        formatter.setDateRange(beginDate, endDate);
+
+        CalendarData testData = new CalendarData("../test-data.cal");
+
+        String testOutput = formatter.format(testData);
 
         System.out.println(testOutput);
     }
