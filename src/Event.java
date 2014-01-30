@@ -86,6 +86,7 @@ public class Event implements Comparable<Event>
         out += this.getTitle() + "\t";
         out += this.getColor() + "\t";
         out += this.getDescription();
+        out += "\t\t";
 
         return out;
     }
