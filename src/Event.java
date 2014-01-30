@@ -97,6 +97,13 @@ public class Event implements Comparable<Event>
 
     public int compareTo(Event anObject)
     {
-        return this.getDate().compareTo(anObject.getDate());
+        int maybeSame = this.getDate().compareTo(anObject.getDate());
+
+        if (maybeSame == 0) {
+            return this.getTitle().compareTo(anObject.getTitle());
+        }
+        else {
+            return maybeSame;
+        }
     }
 }

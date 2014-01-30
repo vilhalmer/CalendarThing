@@ -57,7 +57,7 @@ public class CalendarData
 
     public void addEvent(Event newEvent)
     {
-        SortedSet<Event> events = eventsByDay.get(newEvent.getDate());
+        SortedSet<Event> events = eventsByDay.get(dateString(newEvent.getDate()));
         if (events == null) { // Make a set if there isn't one for this date already.
             events = new TreeSet<Event>();
             eventsByDay.put(dateString(newEvent.getDate()), events);

@@ -30,7 +30,7 @@ public class CalendarListFormatter extends CalendarFormatter
             }
 
             for (Event event : aCalendar.eventsOnDate(currentDate)) {
-                out += event.displayString();
+                out += event.displayString() + "\n";
             }
 
             currentDate.add(GregorianCalendar.DAY_OF_MONTH, 1);
