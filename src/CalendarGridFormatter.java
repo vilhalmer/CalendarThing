@@ -8,7 +8,8 @@ public class CalendarGridFormatter extends CalendarFormatter
 
     public String format(CalendarData aCalendar)
     {
-        String output = " Su  Mo  Tu  We  Th  Fr  Sa \n";
+        String output = "";
+        String header = " Su  Mo  Tu  We  Th  Fr  Sa \n";
         // Need an object to find today, without time:
         GregorianCalendar today = boringDate(new GregorianCalendar());
 
@@ -24,8 +25,10 @@ public class CalendarGridFormatter extends CalendarFormatter
 
         String monthName = currentDate.getDisplayName(GregorianCalendar.MONTH, GregorianCalendar.LONG, Locale.getDefault());
         monthName += " " + currentDate.get(GregorianCalendar.YEAR);
-        int monthNamePadding = (output.length() / 2) + (monthName.length() / 2);
-        System.out.printf("%" + monthNamePadding + "s\n", monthName);
+        int monthNamePadding = (header.length() / 2) + (monthName.length() / 2);
+        output += color(DEFAULT, DEFAULT, BOLD) + String.format("%" + monthNamePadding + "s\n", monthName) + color(DEFAULT, DEFAULT, BOLD);
+
+        output += color(DEFAULT, DEFAULT, REVERSE) + header + color(DEFAULT, DEFAULT, NORMAL);
 
         // Pad to the first column with empty space:
         for (int i = 0; i < firstDayColumn; ++i) {
@@ -43,27 +46,34 @@ public class CalendarGridFormatter extends CalendarFormatter
             int fgColor = DEFAULT;
             int bgColor = DEFAULT;
             int mode = NORMAL;
+            String color = "";
             if (this.colorize) {
                 if (currentDate.compareTo(beginDate) < 0 || currentDate.compareTo(endDate) > 0) {
                     fgColor = BLACK;
                 }
                 else if (aCalendar.eventCountOnDate(currentDate) > 6) {
                     fgColor = RED;
+                    mode = BOLD;
                 }
                 else if (aCalendar.eventCountOnDate(currentDate) > 3) {
                     fgColor = YELLOW;
+                    mode = BOLD;
                 }
                 else if (aCalendar.eventCountOnDate(currentDate) > 0) {
                     fgColor = GREEN;
+                    mode = BOLD;
+                }
+
+                if (currentDate.compareTo(today) == 0 && this.hilightToday) {
+                    //output += String.format("%s[%2s]%s", color(fgColor), String.valueOf(currentDate.get(GregorianCalendar.DAY_OF_MONTH)), color(DEFAULT));
+                    color = color(fgColor, bgColor, mode, REVERSE);
+                }
+                else {
+                    color = color(fgColor, bgColor, mode);
                 }
             }
 
-            if (currentDate.compareTo(today) == 0 && this.hilightToday) {
-                //output += String.format("%s[%2s]%s", color(fgColor), String.valueOf(currentDate.get(GregorianCalendar.DAY_OF_MONTH)), color(DEFAULT));
-                mode = REVERSE;
-            }
-
-            output += String.format("%s %2s %s", color(fgColor, bgColor, mode), String.valueOf(currentDate.get(GregorianCalendar.DAY_OF_MONTH)), color(DEFAULT, DEFAULT, NORMAL));
+            output += String.format("%s %2s %s", color, String.valueOf(currentDate.get(GregorianCalendar.DAY_OF_MONTH)), color(DEFAULT, DEFAULT, NORMAL));
             currentDate.add(GregorianCalendar.DAY_OF_MONTH, 1);
         }
 

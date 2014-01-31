@@ -46,8 +46,14 @@ public abstract class CalendarFormatter
         return newDate;
     }
 
-    protected String color(int foreground, int background, int mode)
+    protected String color(int foreground, int background, int ... modes)
     {
-        return "\033[" + mode + ";3" + foreground + ";4" + background + "m";
+        String output = "\033[";
+        for (int mode : modes) {
+            output += mode + ";";
+        }
+        output += "3" + foreground + ";4" + background + "m";
+
+        return output;
     }
 }
