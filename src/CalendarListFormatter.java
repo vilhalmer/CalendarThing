@@ -6,6 +6,7 @@ public class CalendarListFormatter extends CalendarFormatter
     private boolean hilightToday = true;
     private boolean hilightTomorrow = true;
     private boolean numberEvents = false;
+    private boolean showDescripton = false;
     
     @Override
     public String format(CalendarData aCalendar)
@@ -15,14 +16,10 @@ public class CalendarListFormatter extends CalendarFormatter
         GregorianCalendar tomorrow = boringDate(new GregorianCalendar());
         tomorrow.add(GregorianCalendar.DAY_OF_MONTH, 1);
 
-        int n = 0;
         String out = "";
+        int n = 1;
         while (currentDate.compareTo(endDate) <= 0) {
             if (aCalendar.eventCountOnDate(currentDate) > 0) {
-                if (this.numberEvents) {
-                    out += n + ") ";
-                    ++n;
-                }
                 out += String.format("%s%s %d", color(DEFAULT, DEFAULT, BOLD),
                                                 currentDate.getDisplayName(GregorianCalendar.MONTH, GregorianCalendar.LONG, Locale.getDefault()),
                                                 currentDate.get(GregorianCalendar.DAY_OF_MONTH));
@@ -36,7 +33,26 @@ public class CalendarListFormatter extends CalendarFormatter
             }
 
             for (Event event : aCalendar.eventsOnDate(currentDate)) {
-                out += event.displayString() + "\n";
+                if (this.numberEvents) {
+                    out += String.format("%2s)", String.valueOf(n));
+                    ++n;
+                }
+
+                GregorianCalendar eventDate = event.getDate();
+                int hour = eventDate.get(GregorianCalendar.HOUR);
+                out += String.format(" %2s:%02d %s - %s\n", String.valueOf(((hour == 0) ? 12 : hour)),
+                                                            eventDate.get(GregorianCalendar.MINUTE),
+                                                            eventDate.getDisplayName(GregorianCalendar.AM_PM, GregorianCalendar.SHORT, Locale.getDefault()),
+                                                            event.getTitle());
+
+                if (this.showDescripton) {
+                    for (String line : event.getDescription().split("\n")) {
+                        if (this.numberEvents) {
+                            out += "   "; // Extra indentation to make up for the number.
+                        }
+                        out += "    " + line + "\n";
+                    }
+                }
             }
 
             currentDate.add(GregorianCalendar.DAY_OF_MONTH, 1);
@@ -60,6 +76,11 @@ public class CalendarListFormatter extends CalendarFormatter
         numberEvents = shouldNumber;
     }
 
+    public void setShowDescription(boolean shouldShow)
+    {
+        showDescripton = shouldShow;
+    }
+
     public static void main(String[] args)
     {
         CalendarListFormatter formatter = new CalendarListFormatter();
@@ -69,6 +90,8 @@ public class CalendarListFormatter extends CalendarFormatter
         endDate.add(GregorianCalendar.DAY_OF_MONTH, 1);
 
         formatter.setDateRange(beginDate, endDate);
+        formatter.setNumberEvents(true);
+        formatter.setShowDescription(true);
 
         CalendarData testData = new CalendarData("../test-data.cal");
 

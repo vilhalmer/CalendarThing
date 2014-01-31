@@ -61,22 +61,6 @@ public class Event implements Comparable<Event>
         return color;
     }
 
-    public String displayString()
-    {
-        GregorianCalendar currentDate = this.getDate();
-        String out = String.format("%s %02d / %d:%02d %s - %s\n", currentDate.getDisplayName(GregorianCalendar.MONTH, GregorianCalendar.SHORT, Locale.getDefault()),
-                                                                  currentDate.get(GregorianCalendar.DAY_OF_MONTH),
-                                                                  currentDate.get(GregorianCalendar.HOUR),
-                                                                  currentDate.get(GregorianCalendar.MINUTE),
-                                                                  currentDate.getDisplayName(GregorianCalendar.AM_PM, GregorianCalendar.SHORT, Locale.getDefault()),
-                                                                  this.getTitle());
-        for (String line : this.getDescription().split("\n")) {
-            out += "  " + line;
-        }
-
-        return out;
-    }
-    
     public String storedString()
     {
         GregorianCalendar currentDate = this.getDate();
