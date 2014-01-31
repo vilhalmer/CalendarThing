@@ -74,12 +74,12 @@ public class Event implements Comparable<Event>
 
         return out;
     }
-
+/*
     public String toString()
     {
         return this.displayString();
     }
-
+*/
     public int compareTo(Event anObject)
     {
         int maybeSame = this.getDate().compareTo(anObject.getDate());
