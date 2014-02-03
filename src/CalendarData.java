@@ -32,11 +32,13 @@ public class CalendarData
             }
         }
         catch (FileNotFoundException e) { // What even is error handling
-            System.out.println("derp, invalid data file");
+            System.out.println("Unable to access data file, creating a new one...");
+            try { PrintWriter file = new PrintWriter("cal-data.cal"); file.close(); }
+            catch (Exception err) { System.out.println("Unable to create data file."); }
             System.exit(0);
         }
         catch (IOException e) {
-            System.out.println("welp");
+            System.out.println("Couldn't read file.");
             System.exit(0);
         }
     }
