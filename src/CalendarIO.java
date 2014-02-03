@@ -207,7 +207,6 @@ public class CalendarIO {
             }
             description += nextLine;
         }
-        System.out.println(description);
 
         try {
             Event newEvent = new Event(newEventDate, eventTitle, description, -1);

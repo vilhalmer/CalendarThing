@@ -96,7 +96,6 @@ public class Event implements Comparable<Event>
             this.getColor(),
             this.getDescription());
 
-        System.out.println(eventString);
         return eventString;
     }
 
