@@ -142,7 +142,9 @@ public class CalendarIO {
         System.out.println("Event to remove: ");
         int eventNum = read.nextInt() - 1;
 
-        data.removeEvent(formatter.getEventListing().get(eventNum));
+        data.removeEvent((Event) data.eventsOnDate(new GregorianCalendar(Integer.parseInt(dateComponents[0]),
+                Integer.parseInt(dateComponents[1]) - 1,
+                Integer.parseInt(dateComponents[2]))).toArray()[eventNum]);
         data.writeDataToFile("test-data.cal");
 
     }
@@ -188,7 +190,10 @@ public class CalendarIO {
 
         String tempString;
 
-        Event event = formatter.getEventListing().get(eventNum);
+
+        Event event = (Event) data.eventsOnDate(new GregorianCalendar(Integer.parseInt(dateComponents[0]),
+                Integer.parseInt(dateComponents[1]) - 1,
+                Integer.parseInt(dateComponents[2]))).toArray()[eventNum];
 
         System.out.println("Enter date (yyyy-mm-dd): ");
         tempString = read.nextLine();
@@ -223,7 +228,9 @@ public class CalendarIO {
         else
             eventString += tempString + "\t";
 
-        data.removeEvent(formatter.getEventListing().get(eventNum));
+        data.removeEvent((Event) data.eventsOnDate(new GregorianCalendar(Integer.parseInt(dateComponents[0]),
+                Integer.parseInt(dateComponents[1]) - 1,
+                Integer.parseInt(dateComponents[2]))).toArray()[eventNum]);
         data.addEvent(new Event(eventString));
         data.writeDataToFile("test-data.cal");
 

@@ -1,7 +1,5 @@
 import java.util.GregorianCalendar;
 import java.util.Locale;
-import java.util.List;
-import java.util.ArrayList;
 
 public class CalendarListFormatter extends CalendarFormatter
 {
@@ -9,7 +7,6 @@ public class CalendarListFormatter extends CalendarFormatter
     private boolean hilightTomorrow = true;
     private boolean numberEvents = false;
     private boolean showDescripton = false;
-    private List<Event> eventListing = new ArrayList();
     
     @Override
     public String format(CalendarData aCalendar)
@@ -37,7 +34,6 @@ public class CalendarListFormatter extends CalendarFormatter
 
             for (Event event : aCalendar.eventsOnDate(currentDate)) {
                 if (this.numberEvents) {
-                    eventListing.add(event);
                     out += String.format("%2s)", String.valueOf(n));
                     ++n;
                 }
@@ -84,8 +80,6 @@ public class CalendarListFormatter extends CalendarFormatter
     {
         showDescripton = shouldShow;
     }
-
-    public List<Event> getEventListing() { return eventListing; }
 
     public static void main(String[] args)
     {
