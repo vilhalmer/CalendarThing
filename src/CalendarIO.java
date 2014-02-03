@@ -198,6 +198,9 @@ public class CalendarIO {
         String nextLine = "x";
         System.out.println("Enter event description (blank line to finish):");
         while (!(nextLine = read.nextLine()).equals("")) {
+            if (!description.equals("")) {
+                description += "\n";
+            }
             description += nextLine;
         }
         System.out.println(description);
@@ -404,12 +407,21 @@ public class CalendarIO {
 
         eventString += "-1\t";
 
-        System.out.println("Enter event description: ");
-        tempString = read.nextLine();
-        if (tempString.isEmpty())
+        String description = "";
+        String nextLine = "x";
+        System.out.println("Enter event description (blank line to finish):");
+        while (!(nextLine = read.nextLine()).equals("")) {
+            if (!description.equals("")) {
+                description += "\n";
+            }
+            description += nextLine;
+        }
+        if (description.equals("")) {
             eventString += event.getDescription() + "\t";
-        else
-            eventString += tempString + "\t";
+        }
+        else {
+            eventString += description + "\t\t";
+        }
 
         // remove the old event from the listing
         try {
