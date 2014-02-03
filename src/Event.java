@@ -1,7 +1,6 @@
 /** A single event on a Calendar **/
 
 import java.util.GregorianCalendar;
-import java.util.Locale;
 
 public class Event implements Comparable<Event>
 {
@@ -41,26 +40,43 @@ public class Event implements Comparable<Event>
         description = components[4];
     }
 
+    /**
+     * @return the event date
+     */
     public GregorianCalendar getDate()
     {
         return date;
     }
 
+    /**
+     * @return the event tile
+     */
     public String getTitle()
     {
         return title;
     }
 
+    /**
+     * @return the event description
+     */
     public String getDescription()
     {
         return description;
     }
 
+    /**
+     * @return the event color
+     */
     public int getColor()
     {
         return color;
     }
 
+    /**
+     * Create and return a String representation of the event.
+     *
+     * @return String representation of the event
+     */
     public String storedString()
     {
         GregorianCalendar currentDate = this.getDate();
@@ -74,12 +90,14 @@ public class Event implements Comparable<Event>
 
         return out;
     }
-/*
-    public String toString()
-    {
-        return this.displayString();
-    }
-*/
+
+    /**
+     * Compare this instance of Event with another.
+     *
+     * @param anObject another object to compare to
+     *
+     * @return int comparison of both objects
+     */
     public int compareTo(Event anObject)
     {
         int maybeSame = this.getDate().compareTo(anObject.getDate());

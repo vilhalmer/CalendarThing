@@ -1,10 +1,7 @@
 /** The internal representation of calendar data. **/
 
-import java.util.HashMap;
-import java.util.SortedSet;
-import java.util.TreeSet;
+import java.util.*;
 import java.io.*;
-import java.util.GregorianCalendar;
 
 public class CalendarData
 {
@@ -119,6 +116,7 @@ public class CalendarData
                 }
             }
             out.flush();
+            out.close();
         }
         catch (FileNotFoundException e) { // What even is error handling
             System.err.println("output file cannot be created/modified");
@@ -144,7 +142,8 @@ public class CalendarData
 
     public static void main(String[] args)
     {
-        CalendarData data = new CalendarData("test-data.cal");
-        data.writeDataToFile("test-data.cal");
+        CalendarData data = new CalendarData("cal-data.cal");
+
+        data.writeDataToFile("cal-data.cal");
     }
 }

@@ -17,6 +17,7 @@ public class CalendarThing
 
         if (args.length == 0) {
             mode = MODE_VIEW;
+            IO.display(args);
         }
         else {
             if (args[0].startsWith("-")) {
@@ -45,12 +46,8 @@ public class CalendarThing
         }
 
         if (mode == MODE_ERROR) { // Error handling!
-            System.out.println("derp");
+            System.out.println("Incorrect arguments passed.");
             System.exit(0);
-        }
-        else {
-            System.out.println(mode);
-            
         }
     }
 }

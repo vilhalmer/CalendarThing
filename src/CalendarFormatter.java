@@ -1,3 +1,5 @@
+/** Super class for Calendar formatting. **/
+
 import java.util.GregorianCalendar;
 
 public abstract class CalendarFormatter
@@ -19,6 +21,12 @@ public abstract class CalendarFormatter
     protected GregorianCalendar beginDate;
     protected GregorianCalendar endDate;
 
+    /**
+     * Set the range to format
+     *
+     * @param aBeginDate the beginning of the range
+     * @param anEndDate the end of the range
+     */
     public void setDateRange(GregorianCalendar aBeginDate, GregorianCalendar anEndDate)
     {
         if (anEndDate.before(aBeginDate)) {
@@ -29,11 +37,25 @@ public abstract class CalendarFormatter
         endDate = boringDate(anEndDate);
     }
 
+    /**
+     * Placeholder for subclasses
+     *
+     * @param aCalendar calendar to be formatted
+     *
+     * @return formatted String representation
+     */
     public String format(CalendarData aCalendar)
     {
         return null;
     }
 
+    /**
+     * Clear unnecessary field portions in GregorianCalendar
+     *
+     * @param aDate date to be cleared
+     *
+     * @return the new cleared date
+     */
     protected GregorianCalendar boringDate(GregorianCalendar aDate)
     {
         GregorianCalendar newDate = (GregorianCalendar)aDate.clone();
@@ -46,6 +68,13 @@ public abstract class CalendarFormatter
         return newDate;
     }
 
+    /**
+     * Creates a linux code for color.
+     *
+     * @param foreground foreground color
+     * @param  background background color
+     * @param modes other parameters
+     */
     protected String color(int foreground, int background, int ... modes)
     {
         String output = "\033[";

@@ -12,41 +12,58 @@ public class CalendarIO {
      */
     public void display(String[] args) {
 
-        CalendarData data = new CalendarData("test-data.cal");
+        CalendarData data = new CalendarData("cal-data.cal");
         CalendarListFormatter listFormatter = new CalendarListFormatter();
         CalendarGridFormatter gridFormatter = new CalendarGridFormatter();
+        String[] dateComponents;
         Scanner read = new Scanner(System.in);
+        GregorianCalendar beginDate = null;
+        GregorianCalendar endDate = null;
         String startString;
         String endString;
 
-        if (args.length != 3) {
+        // assign input/use default input based on args
+        if (args.length == 0) {
+            beginDate = new GregorianCalendar();
+            startString = beginDate.get(GregorianCalendar.YEAR) + "-" + (beginDate.get(GregorianCalendar.MONTH) + 1)
+                    + "-" + beginDate.get(GregorianCalendar.DAY_OF_MONTH);
+            endDate = new GregorianCalendar(beginDate.get(GregorianCalendar.YEAR),
+                    beginDate.get(GregorianCalendar.MONTH), beginDate.get(GregorianCalendar.DAY_OF_MONTH) + 1);
+            endString = endDate.get(GregorianCalendar.YEAR) + "-" + (endDate.get(GregorianCalendar.MONTH) + 1)
+                    + "-" + endDate.get(GregorianCalendar.DAY_OF_MONTH);
+        }
+        else if (args.length == 3) {
+            startString = args[1];
+            endString = args[2];
+        }
+        else {
             System.out.println("Enter start date (yyyy-mm-dd): ");
             startString = read.nextLine();
             System.out.println("Enter end date (yyyy-mm-dd): ");
             endString = read.nextLine();
         }
-        else {
-            startString = args[1];
-            endString = args[2];
+
+        // attempt to create Calendars based on the input date for month grid
+        try {
+            dateComponents = startString.split("-");
+            beginDate = new GregorianCalendar(Integer.parseInt(dateComponents[0]),
+                    Integer.parseInt(dateComponents[1]) - 1,
+                    Integer.parseInt(dateComponents[2]));
+            beginDate.set(GregorianCalendar.DAY_OF_MONTH, 1);
+
+            endDate = new GregorianCalendar(Integer.parseInt(dateComponents[0]),
+                    Integer.parseInt(dateComponents[1]) - 1,
+                    Integer.parseInt(dateComponents[2]));
+            endDate.set(GregorianCalendar.DAY_OF_MONTH, endDate.getActualMaximum(GregorianCalendar.DAY_OF_MONTH));
         }
+        catch (Exception e) { System.out.println("Malformed date, incorrect user input."); System.exit(0); }
 
-        String[] dateComponents = startString.split("-");
-        GregorianCalendar beginDate = new GregorianCalendar(Integer.parseInt(dateComponents[0]),
-                Integer.parseInt(dateComponents[1]) - 1,
-                Integer.parseInt(dateComponents[2]));
-        beginDate.set(GregorianCalendar.DAY_OF_MONTH, 1);
-
-        GregorianCalendar endDate = new GregorianCalendar(Integer.parseInt(dateComponents[0]),
-                Integer.parseInt(dateComponents[1]) - 1,
-                Integer.parseInt(dateComponents[2]));
-        endDate.set(GregorianCalendar.DAY_OF_MONTH, endDate.getActualMaximum(GregorianCalendar.DAY_OF_MONTH));
-
+        // format and output calendar grid
         gridFormatter.setDateRange(beginDate, endDate);
-
         String output = gridFormatter.format(data);
-
         System.out.println("\n" + output);
 
+        // format and output event listing
         dateComponents = startString.split("-");
         beginDate = new GregorianCalendar(Integer.parseInt(dateComponents[0]),
                 Integer.parseInt(dateComponents[1]) - 1,
@@ -62,6 +79,7 @@ public class CalendarIO {
 
         output = listFormatter.format(data);
         System.out.println("\n" + output);
+        read.close();
     }
 
     /**
@@ -70,9 +88,10 @@ public class CalendarIO {
      * @param args passed in from main
      */
     public void add(String[] args) {
-        CalendarData data = new CalendarData("test-data.cal");
+        CalendarData data = new CalendarData("cal-data.cal");
         Scanner read = new Scanner(System.in);
         String eventString = "";
+
         switch (args.length) {
             case 1:
                 System.out.println("Enter date (yyyy-mm-dd): ");
@@ -101,8 +120,11 @@ public class CalendarIO {
                 eventString += read.nextLine() + "\t\t";
                 break;
         }
-        data.addEvent(new Event(eventString));
-        data.writeDataToFile("test-data.cal");
+
+        try { data.addEvent(new Event(eventString)); }
+        catch (Exception e) { System.out.println("Malformed event, incorrect user input."); System.exit(0); }
+        data.writeDataToFile("cal-data.cal");
+        read.close();
     }
 
     /**
@@ -112,9 +134,14 @@ public class CalendarIO {
      */
     public void remove(String[] args) {
 
-        CalendarData data = new CalendarData("test-data.cal");
+        CalendarData data = new CalendarData("cal-data.cal");
+        CalendarListFormatter formatter = new CalendarListFormatter();
         Scanner read = new Scanner(System.in);
+        GregorianCalendar beginDate = null;
+        GregorianCalendar endDate = null;
+        String[] dateComponents = new String[3];
         String date;
+
         if (args.length != 2) {
             System.out.println("Enter date (yyyy-mm-dd): ");
             date = read.nextLine();
@@ -122,15 +149,17 @@ public class CalendarIO {
         else
             date = args[1];
 
-        CalendarListFormatter formatter = new CalendarListFormatter();
 
-        String[] dateComponents = date.split("-");
-        GregorianCalendar beginDate = new GregorianCalendar(Integer.parseInt(dateComponents[0]),
-                Integer.parseInt(dateComponents[1]) - 1,
-                Integer.parseInt(dateComponents[2]));
-        GregorianCalendar endDate = new GregorianCalendar(Integer.parseInt(dateComponents[0]),
-                Integer.parseInt(dateComponents[1]) - 1,
-                Integer.parseInt(dateComponents[2]));
+        try {
+            dateComponents = date.split("-");
+            beginDate = new GregorianCalendar(Integer.parseInt(dateComponents[0]),
+                    Integer.parseInt(dateComponents[1]) - 1,
+                    Integer.parseInt(dateComponents[2]));
+            endDate = new GregorianCalendar(Integer.parseInt(dateComponents[0]),
+                    Integer.parseInt(dateComponents[1]) - 1,
+                    Integer.parseInt(dateComponents[2]));
+        }
+        catch (Exception e) { System.out.println("Malformed date, incorrect user input."); System.exit(0); }
 
         formatter.setDateRange(beginDate, endDate);
         formatter.setNumberEvents(true);
@@ -140,13 +169,19 @@ public class CalendarIO {
         System.out.println(output);
 
         System.out.println("Event to remove: ");
-        int eventNum = read.nextInt() - 1;
+        int eventNum = 0;
+        try { eventNum = Integer.parseInt(read.nextLine()) - 1; }
+        catch (Exception e) { System.out.println("Type error, incorrect user input."); System.exit(0); }
 
+        try {
         data.removeEvent((Event) data.eventsOnDate(new GregorianCalendar(Integer.parseInt(dateComponents[0]),
                 Integer.parseInt(dateComponents[1]) - 1,
                 Integer.parseInt(dateComponents[2]))).toArray()[eventNum]);
-        data.writeDataToFile("test-data.cal");
+        }
+        catch (Exception e) { System.out.println("Event does not exist."); System.exit(0); }
 
+        data.writeDataToFile("cal-data.cal");
+        read.close();
     }
 
     /**
@@ -156,8 +191,12 @@ public class CalendarIO {
      */
     public void edit(String[] args) {
 
-        CalendarData data = new CalendarData("test-data.cal");
+        CalendarData data = new CalendarData("cal-data.cal");
+        CalendarListFormatter formatter = new CalendarListFormatter();
         Scanner read = new Scanner(System.in);
+        GregorianCalendar beginDate = null;
+        GregorianCalendar endDate = null;
+        String[] dateComponents = new String[3];
         String date;
         String eventString = "";
 
@@ -168,33 +207,42 @@ public class CalendarIO {
         else
             date = args[1];
 
-        CalendarListFormatter formatter = new CalendarListFormatter();
+        // create Calendars from input
+        try {
+            dateComponents = date.split("-");
+            beginDate = new GregorianCalendar(Integer.parseInt(dateComponents[0]),
+                    Integer.parseInt(dateComponents[1]) - 1,
+                    Integer.parseInt(dateComponents[2]));
+            endDate = new GregorianCalendar(Integer.parseInt(dateComponents[0]),
+                    Integer.parseInt(dateComponents[1]) - 1,
+                    Integer.parseInt(dateComponents[2]));
+        }
+        catch (Exception e) { System.out.println("Malformed date, incorrect user input."); System.exit(0); }
 
-        String[] dateComponents = date.split("-");
-        GregorianCalendar beginDate = new GregorianCalendar(Integer.parseInt(dateComponents[0]),
-                Integer.parseInt(dateComponents[1]) - 1,
-                Integer.parseInt(dateComponents[2]));
-        GregorianCalendar endDate = new GregorianCalendar(Integer.parseInt(dateComponents[0]),
-                Integer.parseInt(dateComponents[1]) - 1,
-                Integer.parseInt(dateComponents[2]));
-
+        // format and print a numbered listing of events
         formatter.setDateRange(beginDate, endDate);
         formatter.setNumberEvents(true);
         formatter.setShowDescription(true);
-
         String output = formatter.format(data);
         System.out.println(output);
 
+        // prompt user for input
         System.out.println("Event to edit: ");
-        int eventNum = Integer.parseInt(read.nextLine()) - 1;
+        int eventNum = 0;
+        try { eventNum = Integer.parseInt(read.nextLine()) - 1; }
+        catch (Exception e) { System.out.println("Type error, incorrect user input."); System.exit(0); }
 
+        // retrieve the event
         String tempString;
-
-
-        Event event = (Event) data.eventsOnDate(new GregorianCalendar(Integer.parseInt(dateComponents[0]),
+        Event event = null;
+        try {
+            event = (Event) data.eventsOnDate(new GregorianCalendar(Integer.parseInt(dateComponents[0]),
                 Integer.parseInt(dateComponents[1]) - 1,
                 Integer.parseInt(dateComponents[2]))).toArray()[eventNum];
+        }
+        catch (Exception e) { System.out.println("No such event exists."); System.exit(0); }
 
+        // prompt user for edits add in from the original if the user gives empty input
         System.out.println("Enter date (yyyy-mm-dd): ");
         tempString = read.nextLine();
         if (tempString.isEmpty())
@@ -228,11 +276,19 @@ public class CalendarIO {
         else
             eventString += tempString + "\t";
 
-        data.removeEvent((Event) data.eventsOnDate(new GregorianCalendar(Integer.parseInt(dateComponents[0]),
-                Integer.parseInt(dateComponents[1]) - 1,
-                Integer.parseInt(dateComponents[2]))).toArray()[eventNum]);
-        data.addEvent(new Event(eventString));
-        data.writeDataToFile("test-data.cal");
+        // remove the old event from the listing
+        try {
+            data.removeEvent((Event) data.eventsOnDate(new GregorianCalendar(Integer.parseInt(dateComponents[0]),
+                    Integer.parseInt(dateComponents[1]) - 1,
+                    Integer.parseInt(dateComponents[2]))).toArray()[eventNum]);
+        }
+        catch (Exception e) { System.out.println("No such event exists."); System.exit(0); }
 
+        // add the new event
+        try { data.addEvent(new Event(eventString)); }
+        catch (Exception e) { System.out.println("Malformed date, incorrect user input."); System.exit(0); }
+
+        data.writeDataToFile("cal-data.cal");
+        read.close();
     }
 }

@@ -4,8 +4,15 @@ import java.util.Locale;
 public class CalendarGridFormatter extends CalendarFormatter
 {
     private boolean colorize = true;
-    private boolean hilightToday = true;
+    private boolean highlightToday = true;
 
+    /**
+     * Format the given Calendar into a month view.
+     *
+     * @param aCalendar calendar date to be formatted
+     *
+     * @return a formatted String containing view of the month
+     */
     public String format(CalendarData aCalendar)
     {
         String output = "";
@@ -64,7 +71,7 @@ public class CalendarGridFormatter extends CalendarFormatter
                     mode = BOLD;
                 }
 
-                if (currentDate.compareTo(today) == 0 && this.hilightToday) {
+                if (currentDate.compareTo(today) == 0 && this.highlightToday) {
                     //output += String.format("%s[%2s]%s", color(fgColor), String.valueOf(currentDate.get(GregorianCalendar.DAY_OF_MONTH)), color(DEFAULT));
                     color = color(fgColor, bgColor, mode, REVERSE);
                 }
@@ -80,14 +87,24 @@ public class CalendarGridFormatter extends CalendarFormatter
         return output;
     }
 
+    /**
+     * Set whether days should be colored.
+     *
+     * @param shouldColorize value to set the colorize setting
+     */
     public void setColorize(boolean shouldColorize)
     {
         colorize = shouldColorize;
     }
 
-    public void setHilightToday(boolean shouldHilight)
+    /**
+     * Set whether the current day should be highlighted
+     *
+     * @param shouldHighlight value to set the highlight setting
+     */
+    public void setHighlightToday(boolean shouldHighlight)
     {
-        hilightToday = shouldHilight;
+        highlightToday = shouldHighlight;
     }
 
     public static void main(String[] args)
@@ -101,7 +118,7 @@ public class CalendarGridFormatter extends CalendarFormatter
 
         formatter.setDateRange(beginDate, endDate);
 
-        CalendarData testData = new CalendarData("../test-data.cal");
+        CalendarData testData = new CalendarData("cal-data.cal");
 
         String testOutput = formatter.format(testData);
 

@@ -1,13 +1,22 @@
+/** Class for formatting a listing of events. **/
+
 import java.util.GregorianCalendar;
 import java.util.Locale;
 
 public class CalendarListFormatter extends CalendarFormatter
 {
-    private boolean hilightToday = true;
-    private boolean hilightTomorrow = true;
+    private boolean highlightToday = true;
+    private boolean highlightTomorrow = true;
     private boolean numberEvents = false;
-    private boolean showDescripton = false;
-    
+    private boolean showDescription = false;
+
+    /**
+     * Format the given Calendar into an event listing.
+     *
+     * @param aCalendar calendar date to be formatted
+     *
+     * @return a formatted String containing a list of events
+     */
     @Override
     public String format(CalendarData aCalendar)
     {
@@ -23,10 +32,10 @@ public class CalendarListFormatter extends CalendarFormatter
                 out += String.format("%s%s %d", color(DEFAULT, DEFAULT, BOLD),
                                                 currentDate.getDisplayName(GregorianCalendar.MONTH, GregorianCalendar.LONG, Locale.getDefault()),
                                                 currentDate.get(GregorianCalendar.DAY_OF_MONTH));
-                if (this.hilightToday && currentDate.compareTo(today) == 0) {
+                if (this.highlightToday && currentDate.compareTo(today) == 0) {
                     out += " - Today";
                 }
-                else if (this.hilightTomorrow && currentDate.compareTo(tomorrow) == 0) {
+                else if (this.highlightTomorrow && currentDate.compareTo(tomorrow) == 0) {
                     out += " - Tomorrow";
                 }
                 out += String.format("%s\n", color(DEFAULT, DEFAULT, NORMAL));
@@ -45,7 +54,7 @@ public class CalendarListFormatter extends CalendarFormatter
                                                             eventDate.getDisplayName(GregorianCalendar.AM_PM, GregorianCalendar.SHORT, Locale.getDefault()),
                                                             event.getTitle());
 
-                if (this.showDescripton) {
+                if (this.showDescription) {
                     for (String line : event.getDescription().split("\n")) {
                         if (this.numberEvents) {
                             out += "   "; // Extra indentation to make up for the number.
@@ -61,24 +70,44 @@ public class CalendarListFormatter extends CalendarFormatter
         return out;
     }
 
-    public void setHilightToday(boolean shouldHilight)
+    /**
+     * Set the highlight setting for the current day.
+     *
+     * @param shouldHighlight the formatter's highlight setting for the current day
+     */
+    public void setHighlightToday(boolean shouldHighlight)
     {
-        hilightToday = shouldHilight;
+        highlightToday = shouldHighlight;
     }
 
-    public void setHilightTomorrow(boolean shouldHilight)
+    /**
+     * Set the highlight setting for the next day.
+     *
+     * @param shouldHighlight the formatter's highlight setting for the next day
+     */
+    public void setHighlightTomorrow(boolean shouldHighlight)
     {
-        hilightTomorrow = shouldHilight;
+        highlightTomorrow = shouldHighlight;
     }
 
+    /**
+     * Set events to be formatted with numbers.
+     *
+     * @param shouldNumber used to set numbered output setting
+     */
     public void setNumberEvents(boolean shouldNumber)
     {
         numberEvents = shouldNumber;
     }
 
+    /**
+     * Set events to output with descriptions
+     *
+     * @param shouldShow used to set showDescription setting
+     */
     public void setShowDescription(boolean shouldShow)
     {
-        showDescripton = shouldShow;
+        showDescription = shouldShow;
     }
 
     public static void main(String[] args)
@@ -93,7 +122,7 @@ public class CalendarListFormatter extends CalendarFormatter
         formatter.setNumberEvents(true);
         formatter.setShowDescription(true);
 
-        CalendarData testData = new CalendarData("test-data.cal");
+        CalendarData testData = new CalendarData("cal-data.cal");
 
         String testOutput = formatter.format(testData);
 

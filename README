@@ -1,1 +1,66 @@
-I'll get to this eventually.
+ a88888b.          dP                         dP                   
+d8'   `88          88                         88                   
+88        .d8888b. 88 .d8888b. 88d888b. .d888b88 .d8888b. 88d888b. 
+88        88'  `88 88 88ooood8 88'  `88 88'  `88 88'  `88 88'  `88 
+Y8.   .88 88.  .88 88 88.  ... 88    88 88.  .88 88.  .88 88       
+ Y88888P' `88888P8 dP `88888P' dP    dP `88888P8 `88888P8 dP       
+ooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooo
+                                                                   
+              d888888P dP       oo                   
+                 88    88                            
+                 88    88d888b. dP 88d888b. .d8888b. 
+                 88    88'  `88 88 88'  `88 88'  `88 
+                 88    88    88 88 88    88 88.  .88 
+                 dP    dP    dP dP dP    dP `8888P88 
+              ooooooooooooooooooooooooooooooo~~~~.88~
+                                             d8888P  
+===================================================================
+
+----------------------
+Basic Functionality
+----------------------
+
+Upon execution this program will output a simple visual calendar
+showing the days in the current month. Below this a list of the 
+events for the current day and the day after that will also be 
+shown.
+
+----------------------
+Command Line Arguments
+----------------------
+
+Options:
+        view     View accepts either two date arguments of the
+                 form YYYY-MM-DD or prompts the user for them.
+                 This is used as a range for events to be
+                 displayed, along with a listing of days in the
+                 first month of the range.
+					 
+                 Example: java CalendarThing view 2014-2-1 2014-2-2
+				 
+        add      Add a new event to the calendar's data file.
+                 Arguments can be passed in at runtime and the
+                 program will prompt the user for the rest.
+                 Accepted arguments at runtime ate date in
+                 YYYY-MM-DD and Time in HH:MM
+				 
+                 Example: java CalendarThing add 2014-2-1
+                       or java CalendarThing add 2014-2-1 11:30
+					   
+        remove   Remove an event from the calendar's data file.
+                 An initial date argument in the form of 
+                 YYYY-MM-DD must be past in to run. Afterwords a 
+                 numbered listing of events for the day will be 
+                 given, followed by a prompt to select an event
+                 from its number.
+
+                 Example: java CalendarThing remove 2014-2-1
+		         
+        edit     Edit an event in the calendar's data file. An 
+                 initial date argument in the form of YYYY-MM-DD
+                 must be past in to run. Afterwords a numbered 
+                 listing of events for the day will be given, 
+                 followed by a prompt to select an event from its
+                 number.
+
+                 Example: java CalendarThing edit 2014-2-1
