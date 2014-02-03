@@ -110,9 +110,7 @@ public class CalendarData
         	PrintWriter out = new PrintWriter(new BufferedWriter(new FileWriter(dataFilePath)));
             for(String s : eventsByDay.keySet()) {
                 for (Event e : eventsByDay.get(s)) {
-                    out.println(e.getDate().get(GregorianCalendar.YEAR) + "-" + (e.getDate().get(GregorianCalendar.MONTH)+ 1) + "-" +
-                            e.getDate().get(GregorianCalendar.DAY_OF_MONTH) + "\t" + e.getDate().get(GregorianCalendar.HOUR_OF_DAY) + ":" +
-                            e.getDate().get(GregorianCalendar.MINUTE) + "\t" + e.getTitle() + "\t" + e.getColor() + "\t" + e.getDescription() + "\t\t");
+                    out.println(e.storedString());
                 }
             }
             out.flush();
