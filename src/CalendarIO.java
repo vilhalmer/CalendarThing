@@ -210,9 +210,12 @@ public class CalendarIO {
 
         try {
             Event newEvent = new Event(newEventDate, eventTitle, description, -1);
+            if (data.eventsOnDate(newEventDate).contains(newEvent)) {
+                throw new Exception("Duplicate event.");
+            }
             data.addEvent(newEvent);
         }
-        catch (Exception e) { System.out.println("Oops, something went wrong."); System.exit(1); }
+        catch (Exception e) { System.out.println("Event is a duplicate."); System.exit(1); }
         data.writeDataToFile("cal-data.cal");
         read.close();
     }
