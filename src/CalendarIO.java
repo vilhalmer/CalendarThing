@@ -32,6 +32,10 @@ public class CalendarIO {
             endString = endDate.get(GregorianCalendar.YEAR) + "-" + (endDate.get(GregorianCalendar.MONTH) + 1)
                     + "-" + endDate.get(GregorianCalendar.DAY_OF_MONTH);
         }
+        else if (args.length == 2) { // If they entered a single date, we're looking for one day.
+            startString = args[1];
+            endString = args[1];
+        }
         else if (args.length == 3) {
             startString = args[1];
             endString = args[2];

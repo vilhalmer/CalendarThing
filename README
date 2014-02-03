@@ -30,37 +30,42 @@ Command Line Arguments
 ----------------------
 
 Options:
-        view     View accepts either two date arguments of the
-                 form YYYY-MM-DD or prompts the user for them.
+        view     View a range of events on the calendar.
+                 Accepts one or two date arguments of the
+                 form YYYY-MM-DD, or prompts the user for them.
                  This is used as a range for events to be
                  displayed, along with a listing of days in the
                  first month of the range.
 					 
-                 Example: java CalendarThing view 2014-2-1 2014-2-2
+                 Example: java CalendarThing view 2014-02-01 2014-02-02
+                       or java CalendarThing view 2014-02-01
+                       or java CalendarThing view
 				 
-        add      Add a new event to the calendar's data file.
+        add      Add a new event to the calendar.
                  Arguments can be passed in at runtime and the
                  program will prompt the user for the rest.
-                 Accepted arguments at runtime ate date in
-                 YYYY-MM-DD and Time in HH:MM
+                 Accepted arguments at runtime are date in
+                 YYYY-MM-DD, and time in HH:MM
 				 
-                 Example: java CalendarThing add 2014-2-1
-                       or java CalendarThing add 2014-2-1 11:30
+                 Example: java CalendarThing add 2014-2-1 11:30
+                       or java CalendarThing add 2014-2-1
+                       or java CalendarThing add
 					   
-        remove   Remove an event from the calendar's data file.
+        remove   Remove an event from the calendar.
                  An initial date argument in the form of 
                  YYYY-MM-DD must be past in to run. Afterwords a 
                  numbered listing of events for the day will be 
                  given, followed by a prompt to select an event
                  from its number.
 
-                 Example: java CalendarThing remove 2014-2-1
+                 Example: java CalendarThing remove 2014-02-01
+                       or java CalendarThing remove
 		         
-        edit     Edit an event in the calendar's data file. An 
-                 initial date argument in the form of YYYY-MM-DD
-                 must be past in to run. Afterwords a numbered 
-                 listing of events for the day will be given, 
-                 followed by a prompt to select an event from its
-                 number.
+        edit     Edit an event in the calendar.
+                 Accepts one date argument of the form YYYY-MM-DD,
+                 or will prompt for it. A numbered listing of
+                 events for the day will be given, followed by a
+                 prompt to select an event using its number.
 
-                 Example: java CalendarThing edit 2014-2-1
+                 Example: java CalendarThing edit 2014-02-01
+                       or java CalendarThing edit
