@@ -60,30 +60,34 @@ public class CalendarIO {
                     Integer.parseInt(dateComponents[2]));
             endDate.set(GregorianCalendar.DAY_OF_MONTH, endDate.getActualMaximum(GregorianCalendar.DAY_OF_MONTH));
         }
-        catch (Exception e) { System.out.println("Malformed date, incorrect user input."); System.exit(1); }
+        catch (Exception e) { System.err.println("Please enter valid dates."); System.exit(1); }
 
-        // format and output calendar grid
-        gridFormatter.setDateRange(beginDate, endDate);
-        String output = gridFormatter.format(data);
-        System.out.println("\n" + output);
+        try {
+            // format and output calendar grid
+            gridFormatter.setDateRange(beginDate, endDate);
+            String output = gridFormatter.format(data);
 
-        // format and output event listing
-        dateComponents = startString.split("-");
-        beginDate = new GregorianCalendar(Integer.parseInt(dateComponents[0]),
-                Integer.parseInt(dateComponents[1]) - 1,
-                Integer.parseInt(dateComponents[2]));
+            // format and output event listing
+            dateComponents = startString.split("-");
+            beginDate = new GregorianCalendar(Integer.parseInt(dateComponents[0]),
+                    Integer.parseInt(dateComponents[1]) - 1,
+                    Integer.parseInt(dateComponents[2]));
 
-        dateComponents = endString.split("-");
-        endDate = new GregorianCalendar(Integer.parseInt(dateComponents[0]),
-                Integer.parseInt(dateComponents[1]) - 1,
-                Integer.parseInt(dateComponents[2]));
+            dateComponents = endString.split("-");
+            endDate = new GregorianCalendar(Integer.parseInt(dateComponents[0]),
+                    Integer.parseInt(dateComponents[1]) - 1,
+                    Integer.parseInt(dateComponents[2]));
 
-        listFormatter.setDateRange(beginDate, endDate);
-        listFormatter.setShowDescription(true);
+            listFormatter.setDateRange(beginDate, endDate);
+            listFormatter.setShowDescription(true);
 
-        output = listFormatter.format(data);
-        System.out.println("\n" + output);
-        read.close();
+            output += "\n" + listFormatter.format(data);
+            System.out.println("\n" + output);
+            read.close();
+        }
+        catch (Exception e) {
+            System.out.println("Invalid date range.");
+        }
     }
 
     /**
